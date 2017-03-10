@@ -1,0 +1,26 @@
+{
+    "name": "sheepy",
+    "version": "0.0.1",
+    "description": "A Simple Static HTTP Server",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "sheepy": "index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/YounGoat/nodejs.sheepy.git"
+    },
+    "keywords": [
+        "httpd",
+        "web-server"
+    ],
+    "author": "youngoat@163.com",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/YounGoat/nodejs.sheepy/issues"
+    },
+    "homepage": "https://github.com/YounGoat/nodejs.sheepy#readme"
+}
