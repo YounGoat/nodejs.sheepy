@@ -1,5 +1,7 @@
 #	sheepy
 
+*sheepy* is a simple and tiny web server. It maybe the smallest one you have ever met, except that Node.js is necessary to run. See [CHANGE LOG](./CHANGELOG.md) for notable changes.
+
 ##	Install & Run
 
 ```bash
@@ -13,7 +15,7 @@ cd /path/to/root/dir/
 sheepy 8080
 ```
 
-##	Other Ways
+##	Other Ways Beyond SHEEPY
 
 There are many other ways to serve static files via HTTP.
 
