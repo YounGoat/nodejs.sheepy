@@ -5,6 +5,7 @@ var MODULE_REQUIRE
 	, fs = require('fs')
 	, http = require('http')
 	, path = require('path')
+	, vm = require('vm')
 	/* NPM */
 
 	/* in-package */
@@ -33,12 +34,11 @@ if (argv[0] && /^\d+$/.test(argv[0])) {
 
 // 检查请求方法。
 function method(req, res, next) {
-	if (req.method != 'GET') {
-		res.statusCode = 400;
-		res.statusMessage = 'Bad request';
+	if (['GET', 'POST'].indexOf(req.method) == -1) {
 		next(400);
 	}
 	else {
+		req.sheepy.remoteAddress = req.socket.remoteAddress;
 		next();
 	}
 }
@@ -112,12 +112,40 @@ function dir(req, res, next) {
 	});
 }
 
+// 执行 JSS 文件。
+function jss(req, res, next) {
+	var extname = path.extname(req.url);
+	if (extname == '.jss') {
+		fs.readFile(req.sheepy.path, function(err, content) {
+			var context = vm.createContext({
+				__dirname: path.dirname(req.sheepy.path),
+				console: console,
+				require: require,
+
+				request: req,
+				response: res,
+				next: next
+			})
+			vm.runInContext(content, context);
+		});
+	}
+	else {
+		next();
+	}
+}
+
+// 静态文件响应。
 function static_file(req, res, next) {
+	if (req.method != 'GET') {
+		return next(400);
+	}
+
 	var rs = fs.createReadStream(req.sheepy.path);
 	rs.pipe(res);
 	rs.on('close', next);
 }
 
+// 日志。
 function logger(req, res, next) {
 	var date, httpVersion, ip, method, pathname, statusCode;
 
@@ -125,7 +153,7 @@ function logger(req, res, next) {
 
 	httpVersion = req.httpVersion;
 
-	ip = req.socket.remoteAddress;
+	ip = req.sheepy.remoteAddress;
 	ip = ip.split(':').slice(-1)[0];
 
 	method = req.method;
@@ -143,6 +171,7 @@ function co(req, res, processors) {
 	var createPromise = function(fn) {
 		return new Promise(function(resolve, reject) {
 			fn(req, res, function(status) {
+				// 如果响应状态有值，则代表请求已被处理，后续步骤无须执行。
 				if (status) {
 					res.statusCode = status;
 					if (httpCodes.hasOwnProperty(status)) {
@@ -164,6 +193,8 @@ function co(req, res, processors) {
 						}
 					});
 				}
+
+				// 否则进入后续步骤。
 				else {
 					resolve();
 				}
@@ -191,6 +222,7 @@ var server = http.createServer((req, res) => {
 		access,
 		default_file,
 		dir,
+		jss,
 		static_file,
 		logger
 	]);

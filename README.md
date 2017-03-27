@@ -1,6 +1,6 @@
 #	sheepy
 
-*sheepy* is a simple and tiny web server. It maybe the smallest one you have ever met, except that Node.js is necessary to run. See [CHANGE LOG](./CHANGELOG.md) for notable changes.
+*sheepy* is a simple and tiny web server. It maybe the smallest one you have ever met, except that Node.js is necessary to run. See [CHANGE LOG](./CHANGELOG.md) for notable changes. If you are interested in contributing to *sheepy*, see [Documents](./docs/SUMMARY.md) for details.
 
 ##	Install & Run
 
