@@ -45,7 +45,7 @@ function method(req, res, next) {
 
 // 检查文件是否可访问。
 function access(req, res, next) {
-	req.sheepy.path = path.join(OPTIONS.root, req.url.substr(1));
+	req.sheepy.path = path.join(OPTIONS.root, req.url.substr(1).replace(/(\?|#).+$/, ''));
 	fs.stat(req.sheepy.path, function(err, stats) {
 		if (err) {
 			next(404);
@@ -119,6 +119,7 @@ function jss(req, res, next) {
 		fs.readFile(req.sheepy.path, function(err, content) {
 			var context = vm.createContext({
 				__dirname: path.dirname(req.sheepy.path),
+				Buffer: Buffer,
 				console: console,
 				require: require,
 

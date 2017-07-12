@@ -1,6 +1,6 @@
 {
     "name": "sheepy",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A Simple Static HTTP Server",
     "main": "index.js",
     "scripts": {
@@ -15,7 +15,8 @@
     },
     "keywords": [
         "httpd",
-        "web-server"
+        "web-server",
+        "JSS"
     ],
     "author": "youngoat@163.com",
     "license": "ISC",
